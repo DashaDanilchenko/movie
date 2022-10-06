@@ -89,14 +89,16 @@ disLike.forEach(d => d.addEventListener('click', del))
 
 let odjMovie = {}
 const arrListLike = []
+let storage = JSON.parse(localStorage.getItem('arrListLike')) || []
 
 function add() {
     this.nextElementSibling.classList.remove('none')
     this.classList.add('none')
     let movId = this.id
     createObjMovie(movId)
-    arrListLike.push(odjMovie)
     console.log(arrListLike)
+    saveMemory()
+    console.log(storage)
 }
 
 function del() {
@@ -104,6 +106,9 @@ function del() {
     this.classList.add('none')
     let movId = this.id
     delObjMovie(movId)
+    console.log(arrListLike)
+    saveMemory()
+    console.log(storage)
 }
 
 async function createObjMovie(idM) {
@@ -115,7 +120,8 @@ async function createObjMovie(idM) {
             }
         }
     })
-    return odjMovie
+    arrListLike.push(odjMovie)
+    return arrListLike
 }
 
 async function delObjMovie(idM) {
@@ -149,15 +155,31 @@ async function watchPage() {
     const listMovie = document.querySelector('.list_movie')
     listMovie.innerHTML = `
     <ul>
-        <li>1</li>
-        <li>2</li>
-        <li>3</li>
-        <li>4</li>
-        <li>5</li>
+        ${arrListLike.map((m) => { 
+              return `<li>${m.name} 
+              <div class="like none" id="${m.id}">add</div>
+              <div class="dis_like" id="${m.id}">delete</div>
+              </li>`  
+            }).join('') }
     </ul>`
+
+    const like = document.querySelectorAll('.like')
+    const disLike = document.querySelectorAll('.dis_like')
+
+    like.forEach(l => l.addEventListener('click', add))
+    disLike.forEach(d => d.addEventListener('click', del))
 
     const mainPage = document.querySelector('.main_page')
     mainPage.addEventListener('click', watchPage)
     }
 
+    async function saveMemory() {
+        localStorage.setItem('arrListLike', JSON.stringify(arrListLike))
+    }
 
+    document.addEventListener("DOMContentLoaded",async function(){
+        if (storage) {
+            arrListLike = storage 
+            console.log(arrListLike)
+        }
+       })

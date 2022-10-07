@@ -109,3 +109,12 @@ h2 {
 .none {
     display: none;
 }
+
+.display {
+    display: flex;
+    margin: 10px;
+}
+
+.name {
+    height: 15px;
+}

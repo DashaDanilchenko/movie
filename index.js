@@ -16,11 +16,14 @@ async function genresAll() {
     genres = await fetch("https://api.themoviedb.org/3/genre/movie/list?api_key=61451d30700be40f9a0f45ccb9c478b2&language=en-US")
     .then(date => date.json())
     .then(date => (date.genres))
-console.log(genres)
 }
 
 
 let strGens
+
+let odjMovie = {}
+const arrListLike = []
+let storage = JSON.parse(localStorage.getItem('arrListLike')) || []
 
 async function searchGenres(ids) {
     let arr = []
@@ -32,7 +35,6 @@ async function searchGenres(ids) {
     }
     )
     strGens = arr.join(', ')
-    console.log(strGens)
     return strGens
 }
 
@@ -40,7 +42,6 @@ let container
 let page = document.querySelector('.page')
 async function firstPage() {
     await moviesAll()
-    console.log(movies)
     page.innerHTML = `<div class="content">
     <header>
         <div class="grid btn">Watch list</div>
@@ -65,7 +66,7 @@ async function createCardMovie() {
     container.innerHTML = `${
         movies.map((m) => { 
         searchGenres(m.genre_ids)
-          return `<div class="movie">
+        let listCards = `<div class="movie">
           <div class="image"><img src="${apiImg}${m.poster_path}"></div>
           <div class="info">
               <div class="name">${m.title}</div>
@@ -75,10 +76,28 @@ async function createCardMovie() {
                 <div class="dis_like none" id="${m.id}">delete</div>
               </div>
           </div>
-          </div>`  
+          </div>` 
+
+          storage.forEach(s => {
+            if (String(s.id) === String(m.id)) {
+                listCards = `<div class="movie">
+          <div class="image"><img src="${apiImg}${m.poster_path}"></div>
+          <div class="info">
+              <div class="name">${m.title}</div>
+              <div class="genre">genre:${strGens}</div>
+              <div class="button">
+                <div class="like none" id="${m.id}">add</div>
+                <div class="dis_like" id="${m.id}">delete</div>
+              </div>
+          </div>
+          </div>`
+            }
+        }) 
+         return listCards 
         }).join('') 
     }`
 
+   
 const like = document.querySelectorAll('.like')
 const disLike = document.querySelectorAll('.dis_like')
 
@@ -87,18 +106,12 @@ disLike.forEach(d => d.addEventListener('click', del))
 
 }
 
-let odjMovie = {}
-const arrListLike = []
-let storage = JSON.parse(localStorage.getItem('arrListLike')) || []
-
 function add() {
     this.nextElementSibling.classList.remove('none')
     this.classList.add('none')
     let movId = this.id
     createObjMovie(movId)
-    console.log(arrListLike)
     saveMemory()
-    console.log(storage)
 }
 
 function del() {
@@ -106,9 +119,7 @@ function del() {
     this.classList.add('none')
     let movId = this.id
     delObjMovie(movId)
-    console.log(arrListLike)
     saveMemory()
-    console.log(storage)
 }
 
 async function createObjMovie(idM) {
@@ -126,7 +137,6 @@ async function createObjMovie(idM) {
 
 async function delObjMovie(idM) {
     arrListLike.filter(mov => {
-            console.log(mov)
             if(String(mov.id) === String(idM)) {
                 const index = arrListLike.indexOf(mov)
                 console.log(index)
@@ -145,7 +155,6 @@ async function watchPage() {
     }
 
     function watchList() {
-        console.log(1)
         page.innerHTML = `<div class="list">
         <h2>Watch list</h2>
         <div class="btn main_page">main page</div>
@@ -156,7 +165,8 @@ async function watchPage() {
     listMovie.innerHTML = `
     <ul>
         ${arrListLike.map((m) => { 
-              return `<li>${m.name} 
+              return `<li class="display">
+              <div class="name">${m.name}</div> 
               <div class="like none" id="${m.id}">add</div>
               <div class="dis_like" id="${m.id}">delete</div>
               </li>`  
@@ -174,12 +184,7 @@ async function watchPage() {
     }
 
     async function saveMemory() {
-        localStorage.setItem('arrListLike', JSON.stringify(arrListLike))
+       localStorage.setItem('arrListLike', JSON.stringify(arrListLike))
     }
 
-    document.addEventListener("DOMContentLoaded",async function(){
-        if (storage) {
-            arrListLike = storage 
-            console.log(arrListLike)
-        }
-       })
+    

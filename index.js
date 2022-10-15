@@ -1,21 +1,15 @@
 const apiImg = "https://image.tmdb.org/t/p/w154/"
 
-let movies = []
-
 async function moviesAll() {
-    movies = await fetch("https://api.themoviedb.org/3/movie/popular?api_key=61451d30700be40f9a0f45ccb9c478b2&language=en-US&page=1")
-    .then(date => date.json())
-    .then(date => (date.results))
-
+    return await fetch("https://api.themoviedb.org/3/movie/popular?api_key=61451d30700be40f9a0f45ccb9c478b2&language=en-US&page=1")
+    .then(data => data.json())
+    .then(data => (data.results))
 }
 
-
-let genres = []
-
 async function genresAll() {
-    genres = await fetch("https://api.themoviedb.org/3/genre/movie/list?api_key=61451d30700be40f9a0f45ccb9c478b2&language=en-US")
-    .then(date => date.json())
-    .then(date => (date.genres))
+    return await fetch("https://api.themoviedb.org/3/genre/movie/list?api_key=61451d30700be40f9a0f45ccb9c478b2&language=en-US")
+    .then(data => data.json())
+    .then(data => (data.genres))
 }
 
 
@@ -26,6 +20,7 @@ const arrListLike = []
 let storage = JSON.parse(localStorage.getItem('arrListLike')) || []
 
 async function searchGenres(ids) {
+    const genres = await genresAll()
     let arr = []
     ids.forEach(id => {
         genres.forEach (g => {
@@ -48,7 +43,7 @@ async function firstPage() {
         <h2 class="grid center">Popular Movies</h2>
         <div class="grid right">Search</div>
     </header>
-    <div class="container">rid</div>
+    <div class="container"></div>
     </div>` 
 
     container = document.querySelector('.container')
@@ -63,6 +58,7 @@ await firstPage()
   
 async function createCardMovie() { 
     await genresAll()
+    const movies = await moviesAll()
     container.innerHTML = `${
         movies.map((m) => { 
         searchGenres(m.genre_ids)
@@ -123,6 +119,7 @@ function del() {
 }
 
 async function createObjMovie(idM) {
+    const movies = await moviesAll()
     movies.forEach(mov => {
         if (String(mov.id) === String(idM)) {
             odjMovie = {
@@ -138,8 +135,7 @@ async function createObjMovie(idM) {
 async function delObjMovie(idM) {
     arrListLike.filter(mov => {
             if(String(mov.id) === String(idM)) {
-                const index = arrListLike.indexOf(mov)
-                console.log(index)
+                const index = arrListLike.indexOf(mov.id)
                 arrListLike.splice(index, 1)
             }
     })
@@ -171,6 +167,7 @@ async function watchPage() {
               <div class="dis_like" id="${m.id}">delete</div>
               </li>`  
             }).join('') }
+       
     </ul>`
 
     const like = document.querySelectorAll('.like')

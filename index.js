@@ -19,8 +19,9 @@ let odjMovie = {}
 const arrListLike = []
 let storage = JSON.parse(localStorage.getItem('arrListLike')) || []
 
+const genres = await genresAll()
+
 async function searchGenres(ids) {
-    const genres = await genresAll()
     let arr = []
     ids.forEach(id => {
         genres.forEach (g => {
@@ -41,26 +42,48 @@ async function firstPage() {
     <header>
         <div class="grid btn">Watch list</div>
         <h2 class="grid center">Popular Movies</h2>
-        <div class="grid right">Search</div>
+        <div class="grid right">
+            <label for="input">Search</label>
+            <input class="seach" type="text">
+        </div>
     </header>
     <div class="container"></div>
     </div>` 
 
     container = document.querySelector('.container')
     
-    await createCardMovie()
-    
     const button = document.querySelector('.btn')
     button.addEventListener('click', watchList)
+
+    const movies = await moviesAll()
+
+    const seach = document.querySelector('.seach')
+
+    if (!seach.value) {
+        console.log(5)
+        await createCardMovie(movies)
+    }
+
+    async function searchMovie() {
+        let enterText = seach.value
+        console.log(enterText)
+            let movieSearch = []
+            movieSearch = movies.filter((m) =>  {String(m.title) !== String(enterText)})
+            console.log(movieSearch)
+            await createCardMovie(movieSearch)
+    }
+
+    seach.addEventListener('input', searchMovie)
+
 }
 await firstPage()
 
-  
-async function createCardMovie() { 
+
+async function createCardMovie(arr) { 
     await genresAll()
-    const movies = await moviesAll()
+
     container.innerHTML = `${
-        movies.map((m) => { 
+        arr.map((m) => { 
         searchGenres(m.genre_ids)
         let listCards = `<div class="movie">
           <div class="image"><img src="${apiImg}${m.poster_path}"></div>

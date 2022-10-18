@@ -94,7 +94,7 @@ h2 {
 }
 
 .name, .genre, .button {
-    margin: 30px;
+    margin: 30px 10px;
     text-align: center;
 }
 

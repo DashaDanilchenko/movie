@@ -60,15 +60,25 @@ async function firstPage() {
     const seach = document.querySelector('.seach')
 
     if (!seach.value) {
-        console.log(5)
         await createCardMovie(movies)
     }
 
     async function searchMovie() {
         let enterText = seach.value
-        console.log(enterText)
-            let movieSearch = []
-            movieSearch = movies.filter((m) =>  {String(m.title) !== String(enterText)})
+        let nameOne = String(enterText).toLowerCase().split('') || []
+        let movieSearch = []
+        movies.forEach((m) =>  {
+                let nameToo = String(m.title).toLowerCase().split('') 
+                let audit = []
+                for (let i = 0; i < nameOne.length; i++) {                                      
+                    audit.push(nameToo[i])
+                    console.log(audit.join(''))                  
+                }
+                if (audit.join('') === nameOne.join('')) {
+                    movieSearch.push(m)
+                   }
+            })
+
             console.log(movieSearch)
             await createCardMovie(movieSearch)
     }

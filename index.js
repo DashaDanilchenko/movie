@@ -1,25 +1,21 @@
+const apiKey = "61451d30700be40f9a0f45ccb9c478b2"
+const apiMovie = `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=en-US&page=1`
+const apiGenres = `https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}&language=en-US`
 const apiImg = "https://image.tmdb.org/t/p/w154/"
 
-async function moviesAll() {
-    return await fetch("https://api.themoviedb.org/3/movie/popular?api_key=61451d30700be40f9a0f45ccb9c478b2&language=en-US&page=1")
+async function informationSearch(api) {
+    return await fetch(api)
     .then(data => data.json())
-    .then(data => (data.results))
-}
-
-async function genresAll() {
-    return await fetch("https://api.themoviedb.org/3/genre/movie/list?api_key=61451d30700be40f9a0f45ccb9c478b2&language=en-US")
-    .then(data => data.json())
-    .then(data => (data.genres))
+    .then(movie => (movie.results ? movie.results : movie.genres))
 }
 
 
 let strGens
-
 let odjMovie = {}
 const arrListLike = []
 let storage = JSON.parse(localStorage.getItem('arrListLike')) || []
 
-const genres = await genresAll()
+const genres = await informationSearch(apiGenres)
 
 async function searchGenres(ids) {
     let arr = []
@@ -37,7 +33,6 @@ async function searchGenres(ids) {
 let container
 let page = document.querySelector('.page')
 async function firstPage() {
-    await moviesAll()
     page.innerHTML = `<div class="content">
     <header>
         <div class="grid btn">Watch list</div>
@@ -55,7 +50,7 @@ async function firstPage() {
     const button = document.querySelector('.btn')
     button.addEventListener('click', watchList)
 
-    const movies = await moviesAll()
+    const movies = await informationSearch(apiMovie)
 
     const seach = document.querySelector('.seach')
 
@@ -71,27 +66,20 @@ async function firstPage() {
                 let nameToo = String(m.title).toLowerCase().split('') 
                 let audit = []
                 for (let i = 0; i < nameOne.length; i++) {                                      
-                    audit.push(nameToo[i])
-                    console.log(audit.join(''))                  
+                    audit.push(nameToo[i])                 
                 }
-                if (audit.join('') === nameOne.join('')) {
+                if (audit.join('') === enterText) {
                     movieSearch.push(m)
                    }
             })
-
-            console.log(movieSearch)
             await createCardMovie(movieSearch)
     }
-
     seach.addEventListener('input', searchMovie)
-
 }
 await firstPage()
 
 
 async function createCardMovie(arr) { 
-    await genresAll()
-
     container.innerHTML = `${
         arr.map((m) => { 
         searchGenres(m.genre_ids)
@@ -152,7 +140,7 @@ function del() {
 }
 
 async function createObjMovie(idM) {
-    const movies = await moviesAll()
+    const movies = await informationSearch(apiMovie)
     movies.forEach(mov => {
         if (String(mov.id) === String(idM)) {
             odjMovie = {

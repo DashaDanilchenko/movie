@@ -3,6 +3,9 @@ const apiMovie = `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&l
 const apiGenres = `https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}&language=en-US`
 const apiImg = "https://image.tmdb.org/t/p/w154/"
 
+// const cardMovie = document.createElement('div')
+
+
 async function informationSearch(api) {
     return await fetch(api)
     .then(data => data.json())
@@ -55,7 +58,7 @@ async function firstPage() {
     const seach = document.querySelector('.seach')
 
     if (!seach.value) {
-        await createCardMovie(movies)
+        createCardMovie(movies)
     }
 
     async function searchMovie() {
@@ -78,40 +81,28 @@ async function firstPage() {
 }
 await firstPage()
 
+function cardMovie ({genre_ids, poster_path, title, id}) {
+    searchGenres(genre_ids)
+    storage.forEach(s => {
+            if (String(s.id) === String(id)) {
+                console.log(5)}
+            })
+    return `<div class="movie">
+    <div class="image"><img src="${apiImg}${poster_path}"></div>
+    <div class="info">
+        <div class="name">${title}</div>
+        <div class="genre">genre:${strGens}</div>
+        <div class="button">
+          <div class="like" id="${id}">add</div>
+          <div class="dis_like none" id="${id}">delete</div>
+        </div>
+    </div>
+    </div>`
+}
 
-async function createCardMovie(arr) { 
+function createCardMovie(arr) { 
     container.innerHTML = `${
-        arr.map((m) => { 
-        searchGenres(m.genre_ids)
-        let listCards = `<div class="movie">
-          <div class="image"><img src="${apiImg}${m.poster_path}"></div>
-          <div class="info">
-              <div class="name">${m.title}</div>
-              <div class="genre">genre:${strGens}</div>
-              <div class="button">
-                <div class="like" id="${m.id}">add</div>
-                <div class="dis_like none" id="${m.id}">delete</div>
-              </div>
-          </div>
-          </div>` 
-
-          storage.forEach(s => {
-            if (String(s.id) === String(m.id)) {
-                listCards = `<div class="movie">
-          <div class="image"><img src="${apiImg}${m.poster_path}"></div>
-          <div class="info">
-              <div class="name">${m.title}</div>
-              <div class="genre">genre:${strGens}</div>
-              <div class="button">
-                <div class="like none" id="${m.id}">add</div>
-                <div class="dis_like" id="${m.id}">delete</div>
-              </div>
-          </div>
-          </div>`
-            }
-        }) 
-         return listCards 
-        }).join('') 
+        arr.map((m) => cardMovie(m)).join('') 
     }`
 
    
@@ -171,6 +162,14 @@ async function watchPage() {
         await firstPage()
     }
 
+    function movieItem ({name, id}) {
+        return `<li class="display">
+        <div class="name">${name}</div> 
+        <div class="like none" id="${id}">add</div>
+        <div class="dis_like" id="${id}">delete</div>
+        </li>`
+    }
+
     function watchList() {
         page.innerHTML = `<div class="list">
         <h2>Watch list</h2>
@@ -181,14 +180,7 @@ async function watchPage() {
     const listMovie = document.querySelector('.list_movie')
     listMovie.innerHTML = `
     <ul>
-        ${arrListLike.map((m) => { 
-              return `<li class="display">
-              <div class="name">${m.name}</div> 
-              <div class="like none" id="${m.id}">add</div>
-              <div class="dis_like" id="${m.id}">delete</div>
-              </li>`  
-            }).join('') }
-       
+        ${arrListLike.map((m) => movieItem(m)).join('') }   
     </ul>`
 
     const like = document.querySelectorAll('.like')

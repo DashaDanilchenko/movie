@@ -98,6 +98,12 @@ h2 {
     text-align: center;
 }
 
+.button {
+    padding: 0;
+    border: 0;
+    text-align: center;
+}
+
 .like, .dis_like {
     padding: 5px;
     border: 1px solid salmon;

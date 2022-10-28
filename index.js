@@ -12,12 +12,30 @@ async function informationSearch(api) {
 
 
 let strGens
-const arrListLike = []
+let arrListLike = []
 let storage = JSON.parse(localStorage.getItem('arrListLike')) || []
+
+function isFavorite(movieId) {
+    return !!arrListLike.find(({id}) => id === movieId)
+}
+
+function toggleFavorite(movei) {
+    if (isFavorite(movei.id)) {
+        arrListLike = arrListLike.filter(({id}) => id !== movei.id)
+       } else {
+        arrListLike.push(movei)
+       }
+}
+
+function toggleFavoriteAndRenderMovie(movei) {
+       toggleFavorite(movei)
+       firstPage()
+       saveFavoriteMovie()
+}
 
 const genres = await informationSearch(apiGenres)
 
-async function searchGenres(ids) {
+function searchGenres(ids) {
     let arr = []
     ids.forEach(id => {
         genres.forEach (g => {
@@ -56,7 +74,7 @@ async function firstPage() {
     const seach = document.querySelector('.seach')
 
     if (!seach.value) {
-        createCardMovie(movies)
+        rendeCardMovie(movies)
     }
 
     async function searchMovie() {
@@ -73,89 +91,39 @@ async function firstPage() {
                     movieSearch.push(m)
                    }
             })
-            createCardMovie(movieSearch)
+            rendeCardMovie(movieSearch)
     }
     seach.addEventListener('input', searchMovie)
 }
 await firstPage()
 
-
-async function cardMovie ({genre_ids, poster_path, title, id}) {
-    await searchGenres(genre_ids)
-    console.log(await searchGenres(genre_ids))
-    arrListLike.forEach(s => {
-            if (String(s.id) === String(id)) {
-                return `<div class="movie">
-                <div class="image"><img src="${apiImg}${poster_path}"></div>
-                <div class="info">
-                    <div class="name">${title}</div>
-                    <div class="genre">genre:${strGens}</div>
-                    <div class="button">
-                      <div class="dis_like" id="${id}">delete</div>
-                    </div>
-                </div>
-                </div>`}
-                else {
-                return `<div class="movie">
+function createMovieCard (movei) {
+    const {genre_ids, poster_path, title, id} = movei
+    searchGenres(genre_ids)
+    const cardMovie = document.createElement('div')
+    cardMovie.innerHTML = `<div class="movie">
                 <div class="image"><img src="${apiImg}${poster_path}"></div>
                  <div class="info">
                     <div class="name">${title}</div>
                      <div class="genre">genre:${strGens}</div>
-                    <div class="button">
-                        <div class="like" id="${id}">add</div>
-                    </div>
+                    <button class="button">
+                        ${
+                        isFavorite(id)   
+                        ?'<div class="like">delete</div>'
+                        :'<div class="like">add</div>'
+                    }
+                    </button>
                 </div>
-                </div>` 
-                }
-             })
+                </div>`      
+        const btnLikeDislike = cardMovie.querySelector('button')
+        btnLikeDislike.addEventListener('click', () => toggleFavoriteAndRenderMovie(movei))
+                
+     return cardMovie          
 }
 
-function createCardMovie(arr) { 
-    container.innerHTML = `${
-        arr.map((m) => cardMovie(m)).join('') 
-    }`
-
-   
-const like = document.querySelectorAll('.like')
-const disLike = document.querySelectorAll('.dis_like')
-
-like.forEach(l => l.addEventListener('click', add))
-disLike.forEach(d => d.addEventListener('click', del))
-
-}
-
-function add() {
-    let movId = this.id
-    saveList(movId)
-    saveMemory()
-}
-
-function del() {
-    let movId = this.id
-    delObjMovie(movId)
-    saveMemory()
-}
-
-async function saveList(idM) {
-    const movies = await informationSearch(apiMovie)
-    movies.forEach(mov => {
-        if (String(mov.id) === String(idM)) {
-            arrListLike.push(mov) 
-        }
-    })
-    console.log(arrListLike)
-    return arrListLike
-}
-
-async function delObjMovie(idM) {
-    arrListLike.filter(mov => {
-            if(String(mov.id) === String(idM)) {
-                const index = arrListLike.indexOf(mov.id)
-                arrListLike.splice(index, 1)
-            }
-    })
-    console.log(arrListLike)
-    return arrListLike
+function rendeCardMovie(arr) { 
+    const cards =  arr.map((m) => createMovieCard(m)) 
+    container.append(...cards)
 }
 
 
@@ -167,20 +135,10 @@ async function watchPage() {
     }
 
     function movieItem ({title, id}) {
-
-        arrListLike.forEach(s => {
-            if (String(s.id) === String(id)) {
-                return `<li class="display">
-        <div class="name">${title}</div> 
-        <div class="dis_like" id="${id}">delete</div>
-        </li>`}
-            else {
                 return `<li class="display">
                 <div class="name">${title}</div> 
                 <div class="like" id="${id}">add</div>
                 </li>` 
-            }
-            })
     }
 
     function watchList() {
@@ -195,17 +153,17 @@ async function watchPage() {
         ${arrListLike.map((m) => movieItem(m)).join('')}   
     </ul>`
 
-    const like = document.querySelectorAll('.like')
-    const disLike = document.querySelectorAll('.dis_like')
+    // const like = document.querySelectorAll('.like')
+    // const disLike = document.querySelectorAll('.dis_like')
 
-    like.forEach(l => l.addEventListener('click', add))
-    disLike.forEach(d => d.addEventListener('click', del))
+    // like.forEach(l => l.addEventListener('click', add))
+    // disLike.forEach(d => d.addEventListener('click', del))
 
     const mainPage = document.querySelector('.main_page')
     mainPage.addEventListener('click', watchPage)
     }
 
-    async function saveMemory() {
+    async function saveFavoriteMovie() {
        localStorage.setItem('arrListLike', JSON.stringify(arrListLike))
     }
 

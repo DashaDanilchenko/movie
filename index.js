@@ -29,6 +29,7 @@ function toggleFavorite(movei) {
 
 function toggleFavoriteAndRenderMovie(movei) {
        toggleFavorite(movei)
+       watchList()
        firstPage()
        saveFavoriteMovie()
 }
@@ -77,22 +78,24 @@ async function firstPage() {
         rendeCardMovie(movies)
     }
 
-    async function searchMovie() {
+    function searchMovie() {
         let enterText = seach.value
         let nameOne = String(enterText).toLowerCase().split('') || []
         let movieSearch = []
         movies.forEach((m) =>  {
-                let nameToo = String(m.title).toLowerCase().split('') 
+                let nameTwo = String(m.title).toLowerCase().split('') 
                 let audit = []
                 for (let i = 0; i < nameOne.length; i++) {                                      
-                    audit.push(nameToo[i])                 
+                    audit.push(nameTwo[i])                
                 }
                 if (audit.join('') === enterText) {
                     movieSearch.push(m)
                    }
             })
+            console.log(movieSearch)
             rendeCardMovie(movieSearch)
     }
+
     seach.addEventListener('input', searchMovie)
 }
 await firstPage()
@@ -130,41 +133,48 @@ function rendeCardMovie(arr) {
 const list = document.querySelector('.list')
 
 
-async function watchPage() {
-        await firstPage()
+function watchPage() {
+        firstPage()
     }
 
-    function movieItem ({title, id}) {
-                return `<li class="display">
-                <div class="name">${title}</div> 
-                <div class="like" id="${id}">add</div>
-                </li>` 
+function movieItem (movei) {
+    const {title, id} = movei
+    const movieLike = document.createElement('div')
+     movieLike.innerHTML = `<li class="display">
+            <div class="name">${title}</div> 
+            <button class="button">
+                    ${
+                    isFavorite(id)   
+                    ?'<div class="like">delete</div>'
+                    :'<div class="like">add</div>'
+                }
+                </button>
+            </li>`
+
+    const btnLikeDislike = movieLike.querySelector('button')
+    btnLikeDislike.addEventListener('click', () => toggleFavoriteAndRenderMovie(movei))
+
+    return movieLike 
     }
 
-    function watchList() {
-        page.innerHTML = `<div class="list">
-        <h2>Watch list</h2>
-        <div class="btn main_page">main page</div>
-        <div class="list_movie"></div>
-    </div>`
+function watchList() {
+    page.innerHTML = `<div class="list">
+    <h2>Watch list</h2>
+    <div class="btn main_page">main page</div>
+    <div class="list_movie"></div>
+</div>`
 
-    const listMovie = document.querySelector('.list_movie')
-    listMovie.innerHTML = `<ul>
-        ${arrListLike.map((m) => movieItem(m)).join('')}   
-    </ul>`
+const listMovie = document.querySelector('.list_movie')
+    
+const list =  arrListLike.map((m) => movieItem(m)) 
+listMovie.append(...list)
 
-    // const like = document.querySelectorAll('.like')
-    // const disLike = document.querySelectorAll('.dis_like')
+const mainPage = document.querySelector('.main_page')
+mainPage.addEventListener('click', watchPage)
+}
 
-    // like.forEach(l => l.addEventListener('click', add))
-    // disLike.forEach(d => d.addEventListener('click', del))
-
-    const mainPage = document.querySelector('.main_page')
-    mainPage.addEventListener('click', watchPage)
-    }
-
-    async function saveFavoriteMovie() {
-       localStorage.setItem('arrListLike', JSON.stringify(arrListLike))
-    }
+function saveFavoriteMovie() {
+    localStorage.setItem('arrListLike', JSON.stringify(arrListLike))
+}
 
     

@@ -52,6 +52,39 @@ function searchGenres(ids) {
 let container
 let page = document.querySelector('.page')
 
+
+function createMovieCard (movei) {
+    const {genre_ids, poster_path, title, id} = movei
+    searchGenres(genre_ids)
+    const cardMovie = document.createElement('div')
+    cardMovie.innerHTML = `<div class="movie">
+                <div class="image"><img src="${apiImg}${poster_path}"></div>
+                 <div class="info">
+                    <div class="name">${title}</div>
+                     <div class="genre">genre:${strGens}</div>
+                    <button class="button">
+                        ${
+                        isFavorite(id)   
+                        ?'<div class="like">delete</div>'
+                        :'<div class="like">add</div>'
+                    }
+                    </button>
+                </div>
+                </div>`      
+        const btnLikeDislike = cardMovie.querySelector('button')
+        btnLikeDislike.addEventListener('click', () => toggleFavoriteAndRenderMovie(movei))
+                
+     return cardMovie          
+}
+
+function rendeCardMovie(arr) { 
+    console.log(arr)
+    const cards =  arr.map((m) => createMovieCard(m)) 
+    container.append(...cards)
+    console.log(arr)
+}
+
+
 async function firstPage() {
     page.innerHTML = `<div class="content">
     <header>
@@ -99,35 +132,6 @@ async function firstPage() {
     seach.addEventListener('input', searchMovie)
 }
 await firstPage()
-
-function createMovieCard (movei) {
-    const {genre_ids, poster_path, title, id} = movei
-    searchGenres(genre_ids)
-    const cardMovie = document.createElement('div')
-    cardMovie.innerHTML = `<div class="movie">
-                <div class="image"><img src="${apiImg}${poster_path}"></div>
-                 <div class="info">
-                    <div class="name">${title}</div>
-                     <div class="genre">genre:${strGens}</div>
-                    <button class="button">
-                        ${
-                        isFavorite(id)   
-                        ?'<div class="like">delete</div>'
-                        :'<div class="like">add</div>'
-                    }
-                    </button>
-                </div>
-                </div>`      
-        const btnLikeDislike = cardMovie.querySelector('button')
-        btnLikeDislike.addEventListener('click', () => toggleFavoriteAndRenderMovie(movei))
-                
-     return cardMovie          
-}
-
-function rendeCardMovie(arr) { 
-    const cards =  arr.map((m) => createMovieCard(m)) 
-    container.append(...cards)
-}
 
 
 const list = document.querySelector('.list')

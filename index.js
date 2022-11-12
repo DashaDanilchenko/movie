@@ -73,6 +73,9 @@ function createMovieCard (movei) {
                 </div>`      
         const btnLikeDislike = cardMovie.querySelector('button')
         btnLikeDislike.addEventListener('click', () => toggleFavoriteAndRenderMovie(movei))
+
+        const btnMovie = cardMovie.querySelector('.image')
+        btnMovie.addEventListener('click', () => location.href = `/movie.html?id=${id}`)
                 
      return cardMovie          
 }
@@ -80,6 +83,7 @@ function createMovieCard (movei) {
 function rendeCardMovie(arr) { 
     console.log(arr)
     const cards =  arr.map((m) => createMovieCard(m)) 
+    container.innerHTML = ''
     container.append(...cards)
     console.log(arr)
 }
@@ -101,7 +105,7 @@ async function firstPage() {
     container = document.querySelector('.container')
     
     const button = document.querySelector('.btn')
-    button.addEventListener('click', watchList)
+    button.addEventListener('click', () => location.href = '/list.html')
 
     const movies = await informationSearch(apiMovie)
 

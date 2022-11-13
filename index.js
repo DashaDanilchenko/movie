@@ -108,4 +108,7 @@ function saveFavoriteMovie() {
     localStorage.setItem('arrListLike', JSON.stringify(arrListLike))
 }
 
-    
+if (storage) {
+    arrListLike = storage 
+    await  firstPage()
+}  

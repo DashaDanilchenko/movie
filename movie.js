@@ -4,9 +4,11 @@ const container = document.querySelector('#movie')
 const urlSearchParams = new URLSearchParams(window.location.search);
 const params = Object.fromEntries(urlSearchParams.entries());
  
-const renderMovie = (movie) => {
+
 const mainPage = document.querySelector('.main_page')
 mainPage.addEventListener('click', () => location.href = '/index.html')
+
+const renderMovie = (movie) => {
 
  const template = document.querySelector('#movie-template')
  const movieElement = template.content.cloneNode(true)

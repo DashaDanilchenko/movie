@@ -3,6 +3,8 @@ const apiMovie = `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&l
 const apiGenres = `https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}&language=en-US`
 const apiImg = "https://image.tmdb.org/t/p/w154/"
 
+const button = document.querySelector('.btn')
+button.addEventListener('click', () => location.href = '/list.html')
 
 async function informationSearch(api) {
     return await fetch(api)
@@ -29,7 +31,6 @@ function toggleFavorite(movei) {
 
 function toggleFavoriteAndRenderMovie(movei) {
        toggleFavorite(movei)
-       watchList()
        firstPage()
        saveFavoriteMovie()
 }
@@ -48,10 +49,6 @@ function searchGenres(ids) {
     strGens = arr.join(', ')
     return strGens
 }
-
-let container
-let page = document.querySelector('.page')
-
 
 function createMovieCard (movei) {
     const {genre_ids, poster_path, title, id} = movei
@@ -81,31 +78,19 @@ function createMovieCard (movei) {
 }
 
 function rendeCardMovie(arr) { 
-    console.log(arr)
+    let container = document.querySelector('.container')
     const cards =  arr.map((m) => createMovieCard(m)) 
     container.innerHTML = ''
     container.append(...cards)
-    console.log(arr)
 }
 
+function searchMovie(enterText, movies) {
+    let movieSearch = movies.filter(mov => mov.title.toLowerCase().includes(enterText.toLowerCase())) || []
+        console.log(movieSearch)
+        rendeCardMovie(movieSearch)
+}
 
 async function firstPage() {
-    page.innerHTML = `<div class="content">
-    <header>
-        <div class="grid btn">Watch list</div>
-        <h2 class="grid center">Popular Movies</h2>
-        <div class="grid right">
-            <label for="input">Search</label>
-            <input class="seach" type="text">
-        </div>
-    </header>
-    <div class="container"></div>
-    </div>` 
-
-    container = document.querySelector('.container')
-    
-    const button = document.querySelector('.btn')
-    button.addEventListener('click', () => location.href = '/list.html')
 
     const movies = await informationSearch(apiMovie)
 
@@ -115,71 +100,9 @@ async function firstPage() {
         rendeCardMovie(movies)
     }
 
-    function searchMovie() {
-        let enterText = seach.value
-        let nameOne = String(enterText).toLowerCase().split('') || []
-        let movieSearch = []
-        movies.forEach((m) =>  {
-                let nameTwo = String(m.title).toLowerCase().split('') 
-                let audit = []
-                for (let i = 0; i < nameOne.length; i++) {                                      
-                    audit.push(nameTwo[i])                
-                }
-                if (audit.join('') === enterText) {
-                    movieSearch.push(m)
-                   }
-            })
-            console.log(movieSearch)
-            rendeCardMovie(movieSearch)
-    }
-
-    seach.addEventListener('input', searchMovie)
+    seach.addEventListener('input', () => searchMovie(seach.value, movies))
 }
 await firstPage()
-
-
-const list = document.querySelector('.list')
-
-
-function watchPage() {
-        firstPage()
-    }
-
-function movieItem (movei) {
-    const {title, id} = movei
-    const movieLike = document.createElement('div')
-     movieLike.innerHTML = `<li class="display">
-            <div class="name">${title}</div> 
-            <button class="button">
-                    ${
-                    isFavorite(id)   
-                    ?'<div class="like">delete</div>'
-                    :'<div class="like">add</div>'
-                }
-                </button>
-            </li>`
-
-    const btnLikeDislike = movieLike.querySelector('button')
-    btnLikeDislike.addEventListener('click', () => toggleFavoriteAndRenderMovie(movei))
-
-    return movieLike 
-    }
-
-function watchList() {
-    page.innerHTML = `<div class="list">
-    <h2>Watch list</h2>
-    <div class="btn main_page">main page</div>
-    <div class="list_movie"></div>
-</div>`
-
-const listMovie = document.querySelector('.list_movie')
-    
-const list =  arrListLike.map((m) => movieItem(m)) 
-listMovie.append(...list)
-
-const mainPage = document.querySelector('.main_page')
-mainPage.addEventListener('click', watchPage)
-}
 
 function saveFavoriteMovie() {
     localStorage.setItem('arrListLike', JSON.stringify(arrListLike))

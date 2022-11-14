@@ -12,7 +12,6 @@ async function informationSearch(api) {
     .then(movie => (movie.results ? movie.results : movie.genres))
 }
 
-
 let strGens
 let arrListLike = []
 let storage = JSON.parse(localStorage.getItem('arrListLike')) || []
@@ -21,17 +20,17 @@ function isFavorite(movieId) {
     return !!arrListLike.find(({id}) => id === movieId)
 }
 
-function toggleFavorite(movei) {
-    if (isFavorite(movei.id)) {
-        arrListLike = arrListLike.filter(({id}) => id !== movei.id)
+function toggleFavorite(movie) {
+    if (isFavorite(movie.id)) {
+        arrListLike = arrListLike.filter(({id}) => id !== movie.id)
        } else {
-        arrListLike.push(movei)
+        arrListLike.push(movie)
        }
 }
 
-function toggleFavoriteAndRenderMovie(movei) {
-       toggleFavorite(movei)
-       firstPage()
+function toggleFavoriteAndRenderMovie(movie) {
+       toggleFavorite(movie)
+       renderPage()
        saveFavoriteMovie()
 }
 
@@ -50,8 +49,8 @@ function searchGenres(ids) {
     return strGens
 }
 
-function createMovieCard (movei) {
-    const {genre_ids, poster_path, title, id} = movei
+function createMovieCard (movie) {
+    const {genre_ids, poster_path, title, id} = movie
     searchGenres(genre_ids)
     const cardMovie = document.createElement('div')
     cardMovie.innerHTML = `<div class="movie">
@@ -69,7 +68,7 @@ function createMovieCard (movei) {
                 </div>
                 </div>`      
         const btnLikeDislike = cardMovie.querySelector('button')
-        btnLikeDislike.addEventListener('click', () => toggleFavoriteAndRenderMovie(movei))
+        btnLikeDislike.addEventListener('click', () => toggleFavoriteAndRenderMovie(movie))
 
         const btnMovie = cardMovie.querySelector('.image')
         btnMovie.addEventListener('click', () => location.href = `/movie.html?id=${id}`)
@@ -77,7 +76,7 @@ function createMovieCard (movei) {
      return cardMovie          
 }
 
-function rendeCardMovie(arr) { 
+function renderCardMovie(arr) { 
     let container = document.querySelector('.container')
     const cards =  arr.map((m) => createMovieCard(m)) 
     container.innerHTML = ''
@@ -86,23 +85,20 @@ function rendeCardMovie(arr) {
 
 function searchMovie(enterText, movies) {
     let movieSearch = movies.filter(mov => mov.title.toLowerCase().includes(enterText.toLowerCase())) || []
-        console.log(movieSearch)
-        rendeCardMovie(movieSearch)
+        renderCardMovie(movieSearch)
 }
 
-async function firstPage() {
-
+async function renderPage() {
     const movies = await informationSearch(apiMovie)
+    const search = document.querySelector('.search')
 
-    const seach = document.querySelector('.seach')
-
-    if (!seach.value) {
-        rendeCardMovie(movies)
+    if (!search.value) {
+        renderCardMovie(movies)
     }
 
-    seach.addEventListener('input', () => searchMovie(seach.value, movies))
+    search.addEventListener('input', () => searchMovie(search.value, movies))
 }
-await firstPage()
+await renderPage()
 
 function saveFavoriteMovie() {
     localStorage.setItem('arrListLike', JSON.stringify(arrListLike))
@@ -110,5 +106,5 @@ function saveFavoriteMovie() {
 
 if (storage) {
     arrListLike = storage 
-    await  firstPage()
+    await  renderPage()
 }  

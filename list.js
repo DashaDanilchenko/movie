@@ -1,7 +1,9 @@
+const mainPage = document.querySelector('.main_page')
+mainPage.addEventListener('click', () => location.href = '/index.html')
 
-let arrListLike = JSON.parse(localStorage.getItem('arrListLike')) || []
-console.log(arrListLike)
-let arr = []
+const listMovie = document.querySelector('.list_movie')
+let dataLocalStorage = JSON.parse(localStorage.getItem('arrListLike')) || []
+let arrListLike = [...dataLocalStorage]
 
 function saveFavoriteMovie() {
     localStorage.setItem('arrListLike', JSON.stringify(arrListLike))
@@ -11,24 +13,17 @@ function isFavorite(movieId) {
     return !!arrListLike.find(({id}) => id === movieId)
 }
 function toggleFavorite(movei) {
-    // if (isFavorite(movei.id)) {
+    if (isFavorite(movei.id)) {
     arrListLike = arrListLike.filter(({id}) => id !== movei.id)
-
-    // 
-    //    } 
-    //    else {
-    //     console.log(movei.indexOf(())
-    //     arrFromStorage.splice(movei.indexOf(), 1)
-    //    }
+       } else {        
+        arrListLike.push(movei)
+       }
 }
 function toggleFavoriteAndRenderMovie(movei) {
     toggleFavorite(movei)
     saveFavoriteMovie()
-    watchList()
+    renderList()
 }
-
-const mainPage = document.querySelector('.main_page')
-mainPage.addEventListener('click', () => location.href = '/index.html')
 
 function movieItem (movei) {    
     const {title, id} = movei
@@ -43,19 +38,15 @@ function movieItem (movei) {
                 }
                 </button>
             </li>`
-
     const btnLikeDislike = movieLike.querySelector('button')
     btnLikeDislike.addEventListener('click', () => toggleFavoriteAndRenderMovie(movei))
 
     return movieLike 
     }
 
-function watchList() {
-
-const listMovie = document.querySelector('.list_movie')
-    
-const list =  arrListLike.map((m) => movieItem(m)) 
+function renderList() {  
+const list =  dataLocalStorage.map((m) => movieItem(m)) 
+listMovie.innerHTML = ''
 listMovie.append(...list)
 }
-
-watchList()
+renderList()

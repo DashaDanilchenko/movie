@@ -12,7 +12,6 @@ async function informationSearch(api) {
     .then(movie => (movie.results ? movie.results : movie.genres))
 }
 
-let strGens
 let arrListLike = []
 let storage = JSON.parse(localStorage.getItem('arrListLike')) || []
 
@@ -37,6 +36,7 @@ function toggleFavoriteAndRenderMovie(movie) {
 const genres = await informationSearch(apiGenres)
 
 function searchGenres(ids) {
+    let strGens
     let arr = []
     ids.forEach(id => {
         genres.forEach (g => {
@@ -51,13 +51,12 @@ function searchGenres(ids) {
 
 function createMovieCard (movie) {
     const {genre_ids, poster_path, title, id} = movie
-    searchGenres(genre_ids)
     const cardMovie = document.createElement('div')
     cardMovie.innerHTML = `<div class="movie">
                 <div class="image"><img src="${apiImg}${poster_path}"></div>
                  <div class="info">
-                    <div class="name">${title}</div>
-                     <div class="genre">genre:${strGens}</div>
+                    <div class="name cursor">${title}</div>
+                     <div class="genre">genre:${searchGenres(genre_ids)}</div>
                     <button class="button">
                         ${
                         isFavorite(id)   
@@ -70,7 +69,7 @@ function createMovieCard (movie) {
         const btnLikeDislike = cardMovie.querySelector('button')
         btnLikeDislike.addEventListener('click', () => toggleFavoriteAndRenderMovie(movie))
 
-        const btnMovie = cardMovie.querySelector('.image')
+        const btnMovie = cardMovie.querySelector('.name')
         btnMovie.addEventListener('click', () => location.href = `/movie.html?id=${id}`)
                 
      return cardMovie          

@@ -1,0 +1,158 @@
+.content {
+    width: calc(100% - 200px);
+    margin: auto;
+}
+
+header {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.grid {
+    display: flex;
+    align-items: center;
+    margin: 10px;
+}
+
+.btn {
+    text-align: center;
+    width: 100px;
+    padding: 5px;
+    border: 1px solid salmon;
+    border-radius: 3px;
+    background:  rgb(238, 145, 135);
+    cursor: pointer;
+}
+
+.center {
+    justify-content: center;
+}
+
+.right {
+    justify-content: end;
+}
+
+.container {
+    width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.movie {
+    width: 280px;
+    height: 300px;
+    background: pink;
+    margin: 10px;
+    display: flex;
+}
+
+
+.list {
+    width: 300px;
+    box-sizing: border-box;
+    margin: 50px auto;
+    border: 2px solid black;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+h2 {
+    text-align: center;
+}
+
+.main_page {
+    margin: 20px;
+    align-self: end;
+}
+
+@media (min-width:830px) and (max-width:1430px) {
+    .container {
+        width: 600px;
+    }
+}
+
+@media (max-width:830px) {
+    .container {
+        width: 300px;
+    }
+    header {
+        grid-template-columns: 1fr;
+        margin: auto;
+    }
+    .content {
+        width: calc(100% - 100px);
+    }
+}
+
+
+.image {
+    width: 150px;
+    height: 230px;
+    margin: 30px auto;
+    background: rgb(133, 133, 189);
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+}
+
+.name, .genre, .button {
+    height: auto;
+    margin: 40px 10px;
+    text-align: center;
+}
+
+.button {
+    align-self: center;
+    width: 110px;
+    padding: 0;
+    border: 0;
+    text-align: center;
+}
+
+.like, .dis_like {
+    padding: 5px;
+    border: 1px solid salmon;
+    border-radius: 3px;
+    background:  rgb(238, 145, 135);
+    cursor: pointer;
+}
+
+.none {
+    display: none;
+}
+
+.display {
+    display: flex;
+    margin: 10px;
+}
+
+.name {
+    height: 15px;
+}
+h3 {
+    font-size: 25px;
+    color: rgb(238, 145, 135);
+    text-align: center;
+}
+span {
+   font-size: 25px; 
+}
+
+.container-movie {
+    background: pink;
+    width: 800px;
+    margin: 0 auto;
+    display: flex; 
+}
+
+.cursor {
+    cursor: pointer;
+}
+
+i {
+    margin-left: 10px;
+}

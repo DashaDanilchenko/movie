@@ -34,26 +34,8 @@ function toggleFavoriteAndRenderMovie(movie) {
        saveFavoriteMovie()
 }
 
-async function informationSearch(api) {
-    return await fetch(api)
-    .then(data => data.json())
-    .then(movie => (movie.genres))
-}
-
-const genres = await informationSearch(apiGenres)
-
 function searchGenres(ids) {
-    let strGens
-    let arr = []
-    ids.forEach(gen => {
-        genres.forEach (g => {
-           if (g.id === gen.id) 
-           arr.push(g.name)
-        }) 
-    }
-    )
-    strGens = arr.join(', ')
-    return strGens
+    return ids.map(id => (id.name)).join(', ')
 }
 
 function renderMovie(movie)  {

@@ -1,0 +1,7 @@
+.movie {
+    width: 280px;
+    height: 300px;
+    background: pink;
+    margin: 10px;
+    display: flex;
+}

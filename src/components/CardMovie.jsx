@@ -1,43 +1,38 @@
-import { useEffect, useState } from 'react'
 import styles from '../styles/CardMovie.module.css'
 import { apiImg } from './api'
 
-const CardMovie = ({ movie, genres }) => {
-  
-  const { title, poster_path, genre_ids } = movie
+const CardMovie = ({
+    movies,  
+  movie,
+  searchGenres,
+  moviesFavorite,
+  addMovie,
+  deleteMovie,
+}) => {
+  const { title, poster_path, genre_ids, id } = movie
 
-  const [strGenres, setStrGenres] = useState('')
-
-
-  useEffect (() => {
-    function searchGenres(ids) {
-        let arr = []
-        ids.forEach((id) => {
-            genres.forEach((g) => {
-            if (g.id === id) arr.push(g.name)
-          })
-        })
-        setStrGenres(arr.join(', '))
-      }
-      searchGenres(genre_ids)
-  })
+  function isFavorite(id) {
+    return !!moviesFavorite.find((i) => i.id === id)
+  }
 
   return (
     <div className={styles.movie}>
-      <div class="image">
+      <div>
         <img src={`${apiImg}${poster_path}`} alt="poster" />
       </div>
-      <div class="info">
-        <div class="name cursor">{title}</div>
-        <div class="genre">genre:{strGenres}</div>
-        <button class="button">
-          {' '}
-          add
-          {/* ${
-                        isFavorite(id)   
-                        ?'<div class="like">delete</div>'
-                        :'<div class="like">add</div>'
-                    } */}
+      <div className={styles.info}>
+        <div className={styles.name_cursor}>{title}</div>
+        <div className={styles.genre}>genre:{searchGenres(genre_ids)}</div>
+        <button className={styles.button}>
+          {isFavorite(id) ? (
+            <div className={styles.like} onClick={() => deleteMovie(moviesFavorite, id)}>
+              delete
+            </div>
+          ) : (
+            <div className={styles.like} onClick={() => addMovie(movies, id)}>
+              add
+            </div>
+          )}
         </button>
       </div>
     </div>

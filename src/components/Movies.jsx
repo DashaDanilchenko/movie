@@ -1,19 +1,11 @@
 import { useEffect, useState } from "react"
 import CardMovie from "./CardMovie"
-import {apiMovie, apiGenres} from "./api"
+import {apiGenres} from "./api"
 
-const Movies = () => {
+const Movies = ({movies, moviesFavorite, addMovie, deleteMovie}) => {
 
-  const [movies, setMovie] = useState ([])
   const [genres, setGenres] = useState ([])
 
-  useEffect (() => {
-    fetch(`${apiMovie}`)
-    .then(data => data.json())
-    .then(movie => setMovie(movie.results))
-  },[])
-
-  // console.log(movies)
 
   useEffect (() => {
     fetch(`${apiGenres}`)
@@ -21,12 +13,21 @@ const Movies = () => {
     .then(movie => setGenres(movie.genres))
   },[])
 
-  // console.log(genres)
+  function searchGenres(ids) {
+    let arr = []
+    ids.forEach((id) => {
+      genres.forEach((g) => {
+        if (g.id === id) arr.push(g.name)
+      })
+    })
+    return arr.join(', ')
+  }
+
 
   return (
     <div>
       <button>List favorite movie</button>
-      {movies.map((movie) => <CardMovie key={movie.id} movie={movie} genres={genres}/>)}
+      {movies.map((movie) => <CardMovie key={movie.id} movie={movie} searchGenres={searchGenres} moviesFavorite={moviesFavorite} addMovie={addMovie} deleteMovie={deleteMovie} movies={movies}/>)}
     </div>
   )
 }

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { Link } from "react-router-dom"
 import CardMovie from "./CardMovie"
 import {apiGenres} from "./api"
 
@@ -26,8 +27,8 @@ const Movies = ({movies, moviesFavorite, addMovie, deleteMovie}) => {
 
   return (
     <div>
-      <button>List favorite movie</button>
-      {movies.map((movie) => <CardMovie key={movie.id} movie={movie} searchGenres={searchGenres} moviesFavorite={moviesFavorite} addMovie={addMovie} deleteMovie={deleteMovie} movies={movies}/>)}
+      <Link to="list"><button>List favorite movie</button></Link> 
+      {movies.map((movie) => <CardMovie key={movie.id} movie={movie} searchGenres={searchGenres} moviesFavorite={moviesFavorite} addMovie={addMovie} deleteMovie={deleteMovie}/>)}
     </div>
   )
 }

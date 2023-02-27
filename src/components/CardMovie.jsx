@@ -2,7 +2,6 @@ import styles from '../styles/CardMovie.module.css'
 import { apiImg } from './api'
 
 const CardMovie = ({
-    movies,  
   movie,
   searchGenres,
   moviesFavorite,
@@ -25,11 +24,11 @@ const CardMovie = ({
         <div className={styles.genre}>genre:{searchGenres(genre_ids)}</div>
         <button className={styles.button}>
           {isFavorite(id) ? (
-            <div className={styles.like} onClick={() => deleteMovie(moviesFavorite, id)}>
+            <div className={styles.like} onClick={() => deleteMovie(id)}>
               delete
             </div>
           ) : (
-            <div className={styles.like} onClick={() => addMovie(movies, id)}>
+            <div className={styles.like} onClick={() => addMovie(id)}>
               add
             </div>
           )}

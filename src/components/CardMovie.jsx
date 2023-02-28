@@ -7,6 +7,7 @@ const CardMovie = ({
   moviesFavorite,
   addMovie,
   deleteMovie,
+  findId
 }) => {
   const { title, poster_path, genre_ids, id } = movie
 
@@ -15,7 +16,7 @@ const CardMovie = ({
   }
 
   return (
-    <div className={styles.movie}>
+    <div className={styles.movie} onClick={() => findId(id)}>
       <div>
         <img src={`${apiImg}${poster_path}`} alt="poster" />
       </div>

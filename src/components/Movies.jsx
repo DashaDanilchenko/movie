@@ -1,18 +1,16 @@
-import { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
-import CardMovie from "./CardMovie"
-import {apiGenres} from "./api"
+import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import CardMovie from './CardMovie'
+import { apiGenres } from './api'
 
-const Movies = ({movies, moviesFavorite, addMovie, deleteMovie}) => {
+const Movies = ({ movies, moviesFavorite, addMovie, deleteMovie, findId}) => {
+  const [genres, setGenres] = useState([])
 
-  const [genres, setGenres] = useState ([])
-
-
-  useEffect (() => {
+  useEffect(() => {
     fetch(`${apiGenres}`)
-    .then(data => data.json())
-    .then(movie => setGenres(movie.genres))
-  },[])
+      .then((data) => data.json())
+      .then((movie) => setGenres(movie.genres))
+  }, [])
 
   function searchGenres(ids) {
     let arr = []
@@ -24,11 +22,24 @@ const Movies = ({movies, moviesFavorite, addMovie, deleteMovie}) => {
     return arr.join(', ')
   }
 
-
   return (
     <div>
-      <Link to="list"><button>List favorite movie</button></Link> 
-      {movies.map((movie) => <CardMovie key={movie.id} movie={movie} searchGenres={searchGenres} moviesFavorite={moviesFavorite} addMovie={addMovie} deleteMovie={deleteMovie}/>)}
+      <Link to="list">
+        <button>List favorite movie</button>
+      </Link>
+      {movies.map((movie) => (
+        <Link to="single">
+          <CardMovie
+            key={movie.id}
+            movie={movie}
+            searchGenres={searchGenres}
+            moviesFavorite={moviesFavorite}
+            addMovie={addMovie}
+            deleteMovie={deleteMovie}
+            findId={findId}
+          />
+        </Link>
+      ))}
     </div>
   )
 }

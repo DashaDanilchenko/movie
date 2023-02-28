@@ -13,6 +13,7 @@ function App() {
   const [movies, setMovie] = useState ([])
   const [moviesFavorite, setMoviesFavorite] = useState (() => {
     return (JSON.parse(localStorage.getItem('moviesFavorite'))) || [] })
+  const [idMovie, setIdMovie] = useState('') 
 
     useEffect (() => {
       localStorage.setItem('moviesFavorite', JSON.stringify(moviesFavorite))
@@ -35,15 +36,20 @@ function App() {
 
   console.log(moviesFavorite)
 
+
+  function findId(id) {
+    setIdMovie(`${id}`)
+  }
+
   return (
     <BrowserRouter>
       <div className="App">
         <Routes>
           <Route>
-          <Route path="/" element={<Movies movies={movies} moviesFavorite={moviesFavorite} addMovie={addMovie} deleteMovie={deleteMovie}/>}/>
+          <Route path="/" element={<Movies movies={movies} moviesFavorite={moviesFavorite} addMovie={addMovie} deleteMovie={deleteMovie} findId={findId}/>}/>
             <Route path="*" element={<NotFound />}/>
             <Route path="list" element={<ListFavorite moviesFavorite={moviesFavorite} addMovie={addMovie} deleteMovie={deleteMovie}/>}/>
-            <Route path=":idMovie" element={<SingleMovie />} />
+            <Route path="single" element={<SingleMovie idMovie={idMovie}/>} />
           </Route>
         </Routes>
       </div>

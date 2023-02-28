@@ -49,7 +49,7 @@ function App() {
           <Route path="/" element={<Movies movies={movies} moviesFavorite={moviesFavorite} addMovie={addMovie} deleteMovie={deleteMovie} findId={findId}/>}/>
             <Route path="*" element={<NotFound />}/>
             <Route path="list" element={<ListFavorite moviesFavorite={moviesFavorite} addMovie={addMovie} deleteMovie={deleteMovie}/>}/>
-            <Route path="single" element={<SingleMovie idMovie={idMovie}/>} />
+            <Route path="single" element={<SingleMovie idMovie={idMovie} />} />
           </Route>
         </Routes>
       </div>

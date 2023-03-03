@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import styles from '../styles/CardMovie.module.css'
 import { apiImg } from './api'
 
@@ -16,12 +17,12 @@ const CardMovie = ({
   }
 
   return (
-    <div className={styles.movie} onClick={() => findId(id)}>
+    <div className={styles.movie} >
       <div>
-        <img src={`${apiImg}${poster_path}`} alt="poster" />
+        <img src={`${apiImg}${poster_path}`} alt="poster"/>
       </div>
       <div className={styles.info}>
-        <div className={styles.name_cursor}>{title}</div>
+      <Link to="single"><div className={styles.name_cursor}  onClick={() => findId(id)}>{title}</div></Link>
         <div className={styles.genre}>genre:{searchGenres(genre_ids)}</div>
         <button className={styles.button}>
           {isFavorite(id) ? (

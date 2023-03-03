@@ -9,10 +9,13 @@ import SingleMovie from './components/SingleMovie'
 
 function App() {
   const [movies, setMovie] = useState([])
+  const [copyMovie, setCopyMovies] = useState([])
   const [moviesFavorite, setMoviesFavorite] = useState(() => {
     return JSON.parse(localStorage.getItem('moviesFavorite')) || []
   })
-  const [idMovie, setIdMovie] = useState('')
+  const [idMovie, setIdMovie] = useState(() => {
+    return JSON.parse(localStorage.getItem('idMovie')) || ''
+  })
   const [text, setText] = useState('')
 
   useEffect(() => {
@@ -24,6 +27,18 @@ function App() {
       .then((data) => data.json())
       .then((movie) => setMovie(movie.results))
   }, [])
+
+  useEffect(() => {
+    fetch(`${apiMovie}`)
+      .then((data) => data.json())
+      .then((movie) => setCopyMovies(movie.results))
+  }, [])
+
+  useEffect(() => {
+    localStorage.setItem('idMovie', JSON.stringify(idMovie))
+  }, [idMovie])
+
+  
 
   function addMovie(id) {
     const movieItem = movies.find((item) => item.id === id)
@@ -47,7 +62,9 @@ function App() {
               path="/"
               element={
                 <Movies
-                  movies={movies}
+                movies={movies}
+                copyMovie={copyMovie}
+                setCopyMovies={setCopyMovies}
                   moviesFavorite={moviesFavorite}
                   addMovie={addMovie}
                   deleteMovie={deleteMovie}

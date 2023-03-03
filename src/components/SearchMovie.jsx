@@ -2,13 +2,13 @@ const SearchMovie = ({text, setText, searchMovie}) => {
 
     function searchTextAndMovie(e) {
         setText(e.target.value) 
-        searchMovie(text) 
+        searchMovie() 
     }
 
   return (
-    <form >
+    <div >
         <label>Search: <input type="text" value={text} onChange={(e) => {searchTextAndMovie(e)}}/></label>
-    </form>
+    </div>
     
   )
 }

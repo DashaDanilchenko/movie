@@ -19,10 +19,12 @@ const SingleMovie = ({idMovie}) => {
       <div>
         <h2>{movie.title}</h2>
         <img src={`${apiImg}${movie.poster_path}`} alt="poster" />
-        {/* <p>genre:{`${movie.genres.map((i) => i.name).join(', ')}`}</p> */}
+        <p>genre:</p>
       </div>
     </div>
   )
 }
 
 export default SingleMovie
+
+{/* <p>genre:{`${movie.genres.map((i) => i.name).join(', ')}`}</p> */}

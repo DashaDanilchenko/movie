@@ -1,13 +1,8 @@
-const SearchMovie = ({text, setText, searchMovie}) => {
-
-    function searchTextAndMovie(e) {
-        setText(e.target.value) 
-        searchMovie() 
-    }
+const SearchMovie = ({text, setText}) => {
 
   return (
     <div >
-        <label>Search: <input type="text" value={text} onChange={(e) => {searchTextAndMovie(e)}}/></label>
+        <label>Search: <input type="search" value={text} onChange={(e) => {setText(e.target.value)}}/></label>
     </div>
     
   )

@@ -4,7 +4,7 @@ import CardMovie from './CardMovie'
 import { apiGenres } from './api'
 import SearchMovie from './SearchMovie'
 
-const Movies = ({ movies, copyMovie, setCopyMovies, moviesFavorite, addMovie, deleteMovie, findId, setMovie, text, setText}) => {
+const Movies = ({ movies, moviesFavorite, addMovie, deleteMovie, findId, setMovie, text, setText}) => {
   const [genres, setGenres] = useState([])
 
   useEffect(() => {
@@ -25,27 +25,17 @@ const Movies = ({ movies, copyMovie, setCopyMovies, moviesFavorite, addMovie, de
     return arr.join(', ')
   }
 
-  function searchMovie() {
-    if (!text) {
-      setCopyMovies(movies)
-    }
-    console.log(text)
-    console.log(copyMovie)
-    setCopyMovies(movies.filter((movie) => movie.title.toLowerCase().includes(text.toLowerCase())))
-    console.log(text)
-    console.log(copyMovie)
+  function search() {
+   return movies.filter((movie) => movie.title.toLowerCase().includes(text.toLowerCase()))
   }
-
-  // console.log(text)
-  // console.log(copyMovie)
 
   return (
     <div>
       <Link to="list">
         <button>List favorite movie</button>
       </Link>
-      <SearchMovie text={text} setText={setText} searchMovie={searchMovie}/>
-      {copyMovie.map((movie) => (
+      <SearchMovie text={text} setText={setText} />
+      {search().map((movie) => (
           <CardMovie
             key={movie.id}
             movie={movie}

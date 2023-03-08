@@ -71,8 +71,7 @@ function App() {
               element={
                 <ListFavorite
                   moviesFavorite={moviesFavorite}
-                  addMovie={addMovie}
-                  deleteMovie={deleteMovie}
+                  setMoviesFavorite={setMoviesFavorite}
                 />
               }
             />

@@ -45,6 +45,8 @@ function App() {
     setIdMovie(`${id}`)
   }
 
+  console.log(movies)
+
   return (
     <BrowserRouter>
       <div className="App">
@@ -71,7 +73,7 @@ function App() {
               element={
                 <ListFavorite
                   moviesFavorite={moviesFavorite}
-                  setMoviesFavorite={setMoviesFavorite}
+                  deleteMovie={deleteMovie}
                 />
               }
             />

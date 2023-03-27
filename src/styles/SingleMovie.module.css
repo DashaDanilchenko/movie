@@ -1,0 +1,7 @@
+.single_movie {
+    width: 300px;
+    min-height: 400px;
+    background: rgb(192, 255, 236);
+    margin: 30px auto;
+    padding: 20px;
+}

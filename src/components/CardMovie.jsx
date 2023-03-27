@@ -18,12 +18,8 @@ const CardMovie = ({
 
   return (
     <div className={styles.movie} >
-      <div>
+      <div >
         <img src={`${apiImg}${poster_path}`} alt="poster"/>
-      </div>
-      <div className={styles.info}>
-      <Link to="single"><div className={styles.name_cursor}  onClick={() => findId(id)}>{title}</div></Link>
-        <div className={styles.genre}>genre:{searchGenres(genre_ids)}</div>
         <button className={styles.button}>
           {isFavorite(id) ? (
             <div className={styles.like} onClick={() => deleteMovie(id)}>
@@ -35,6 +31,10 @@ const CardMovie = ({
             </div>
           )}
         </button>
+      </div>
+      <div className={styles.info}>
+        <Link to="single"><div className={styles.name_cursor}  onClick={() => findId(id)}>{title}</div></Link>
+        <div className={styles.genre}>genre: {searchGenres(genre_ids)}</div> 
       </div>
     </div>
   )

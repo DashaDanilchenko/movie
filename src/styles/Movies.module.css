@@ -1,0 +1,46 @@
+.container_movie {
+    margin: 20px auto;
+    width: 1200px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.list {
+    border: none;
+    background: pink;
+    width: 250px;
+    color: rgb(141, 103, 103);
+    cursor: pointer;
+    margin: 20px;
+    padding: 5px;
+    border-radius: 3px;
+    font-weight: 100;
+    font-size: 20px;
+}
+
+.button_delete {
+    border: none;
+    background: pink;
+    width: 60px;
+    color: rgb(141, 103, 103);
+    cursor: pointer;
+    margin-left: 10px;
+    padding: 5px;
+    border-radius: 3px;
+    font-weight: 100;
+    font-size: 15px;
+}
+
+@media (min-width:600px) and (max-width:1200px){
+
+    .container_movie {
+        width: 600px;
+    }
+  }
+
+  @media(max-width:600px){
+   
+    .container_movie {
+        width: 300px;
+    }
+  }

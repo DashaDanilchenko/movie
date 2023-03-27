@@ -1,7 +1,9 @@
+
+
 const SearchMovie = ({text, setText}) => {
 
   return (
-    <div >
+    <div>
         <label>Search: <input type="search" value={text} onChange={(e) => {setText(e.target.value)}}/></label>
     </div>
     

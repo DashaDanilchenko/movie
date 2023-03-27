@@ -5,3 +5,20 @@
     margin: 10px;
     display: flex;
 }
+
+.info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: 5px;
+}
+
+.button {
+    width: 70px;
+    cursor: pointer;
+    color: rgb(141, 103, 103);
+    margin: 20px;
+    border: none;
+    padding: 2px;
+    border-radius: 5px;
+}

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { apiKey, apiImg } from './api'
+import style from '../styles/Movies.module.css'
+import styles from '../styles/SingleMovie.module.css'
 
 const SingleMovie = ({idMovie}) => {
 
@@ -14,11 +16,12 @@ const SingleMovie = ({idMovie}) => {
   
   return (
     <div>
-      <Link to=".." relative="path"><button>on the main</button></Link>
-      <div>
+      <Link to=".." relative="path"><button className={style.list}>on the main</button></Link>
+      <div className={styles.single_movie}>
         {movie.title && <h2>{movie.title}</h2>}
         {movie.poster_path && <img src={`${apiImg}${movie.poster_path}`} alt="poster" />}
         <p>genre: {movie.genres && movie.genres.map((i) => i.name).join(', ')}</p>
+        {movie.overview && <p>{movie.overview}</p>}
       </div>
     </div>
   )

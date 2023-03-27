@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import CardMovie from './CardMovie'
 import { apiGenres } from './api'
 import SearchMovie from './SearchMovie'
+import styles from '../styles/Movies.module.css'
 
 const Movies = ({ movies, moviesFavorite, addMovie, deleteMovie, findId, setMovie, text, setText}) => {
   const [genres, setGenres] = useState([])
@@ -32,9 +33,10 @@ const Movies = ({ movies, moviesFavorite, addMovie, deleteMovie, findId, setMovi
   return (
     <div>
       <Link to="list">
-        <button>List favorite movie</button>
+        <button className={styles.list}>List favorite movie</button>
       </Link>
       <SearchMovie text={text} setText={setText} />
+      <div className={styles.container_movie}>
       {search().map((movie) => (
           <CardMovie
             key={movie.id}
@@ -46,6 +48,8 @@ const Movies = ({ movies, moviesFavorite, addMovie, deleteMovie, findId, setMovi
             findId={findId}
           />
       ))}
+      </div>
+      
     </div>
   )
 }
